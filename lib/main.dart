@@ -27,7 +27,7 @@ class LabAApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Lab A - BottomNavigationBar',
+      title: 'Lab A - Four Screens',
       theme: ThemeData(primarySwatch: Colors.blue),
       home: const MainNavigationScreen(),
     );
@@ -49,7 +49,7 @@ class MainNavigationScreen extends StatelessWidget {
     final selectedIndex = context.watch<TabModel>().selectedIndex;
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Lab A: Bottom Navigation')),
+      appBar: AppBar(title: const Text('Lab A: Four Screens')),
       body: _screens[selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
