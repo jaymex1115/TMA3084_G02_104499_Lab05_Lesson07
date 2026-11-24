@@ -49,7 +49,7 @@ class MainNavigationScreen extends StatelessWidget {
     final selectedIndex = context.watch<TabModel>().selectedIndex;
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Lab A: Bottom Navigation')),
+      appBar: AppBar(title: const Text('Lab A: Four Screens')),
       body: _screens[selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
