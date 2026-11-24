@@ -1,118 +1,69 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-void main() {
-  runApp(const LabBApp());
+import 'screen1.dart';
+import 'screen2.dart';
+import 'screen3.dart';
+import 'screen4.dart';
+
+class TabModel extends ChangeNotifier {
+  int selectedIndex = 0;
+
+  void selectTab(int index) {
+    selectedIndex = index;
+    notifyListeners();
+  }
 }
 
-class LabBApp extends StatelessWidget {
-  const LabBApp({super.key});
+void main() {
+  runApp(
+    ChangeNotifierProvider(create: (_) => TabModel(), child: const LabAApp()),
+  );
+}
+
+class LabAApp extends StatelessWidget {
+  const LabAApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Lab B - Sortable DataTable',
-      theme: ThemeData(primarySwatch: Colors.indigo),
-      home: const CarDataTableScreen(),
+      title: 'Lab A - BottomNavigationBar',
+      theme: ThemeData(primarySwatch: Colors.blue),
+      home: const MainNavigationScreen(),
     );
   }
 }
 
-class Car {
-  final String make;
-  final String model;
-  final int price;
+class MainNavigationScreen extends StatelessWidget {
+  const MainNavigationScreen({super.key});
 
-  Car({required this.make, required this.model, required this.price});
-}
-
-class CarDataTableScreen extends StatefulWidget {
-  const CarDataTableScreen({super.key});
-
-  @override
-  State<CarDataTableScreen> createState() => _CarDataTableScreenState();
-}
-
-class _CarDataTableScreenState extends State<CarDataTableScreen> {
-  int? _sortColumnIndex;
-  bool _isAscending = true;
-
-  final List<Car> _cars = [
-    Car(make: 'Perodua', model: 'Axia', price: 38600),
-    Car(make: 'Proton', model: 'Saga', price: 34800),
-    Car(make: 'Honda', model: 'City', price: 84900),
-    Car(make: 'Toyota', model: 'Vios', price: 89600),
-    Car(make: 'Mazda', model: 'CX-5', price: 144469),
+  static const List<Widget> _screens = [
+    Screen1(),
+    Screen2(),
+    Screen3(),
+    Screen4(),
   ];
-
-  void _onSort(int columnIndex, bool ascending) {
-    setState(() {
-      _sortColumnIndex = columnIndex;
-      _isAscending = ascending;
-
-      if (columnIndex == 0) {
-        _cars.sort(
-          (a, b) =>
-              ascending ? a.make.compareTo(b.make) : b.make.compareTo(a.make),
-        );
-      } else if (columnIndex == 1) {
-        _cars.sort(
-          (a, b) => ascending
-              ? a.model.compareTo(b.model)
-              : b.model.compareTo(a.model),
-        );
-      } else if (columnIndex == 2) {
-        _cars.sort(
-          (a, b) => ascending
-              ? a.price.compareTo(b.price)
-              : b.price.compareTo(a.price),
-        );
-      }
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
+    final selectedIndex = context.watch<TabModel>().selectedIndex;
+
     return Scaffold(
-      appBar: AppBar(title: const Text('Lab B: Car Inventory DataTable')),
-      body: SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
-        child: DataTable(
-          sortColumnIndex: _sortColumnIndex,
-          sortAscending: _isAscending,
-          columns: [
-            DataColumn(
-              label: const Text(
-                'Car Make',
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
-              onSort: _onSort,
-            ),
-            DataColumn(
-              label: const Text(
-                'Model',
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
-              onSort: _onSort,
-            ),
-            DataColumn(
-              label: const Text(
-                'Price (RM)',
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
-              numeric: true,
-              onSort: _onSort,
-            ),
-          ],
-          rows: _cars.map((car) {
-            return DataRow(
-              cells: [
-                DataCell(Text(car.make)),
-                DataCell(Text(car.model)),
-                DataCell(Text(car.price.toString())),
-              ],
-            );
-          }).toList(),
-        ),
+      appBar: AppBar(title: const Text('Lab A: Bottom Navigation')),
+      body: _screens[selectedIndex],
+      bottomNavigationBar: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
+        currentIndex: selectedIndex,
+        onTap: (index) => context.read<TabModel>().selectTab(index),
+        items: const [
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
+          BottomNavigationBarItem(icon: Icon(Icons.alarm), label: 'Alarm'),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.business),
+            label: 'Business',
+          ),
+          BottomNavigationBarItem(icon: Icon(Icons.school), label: 'School'),
+        ],
       ),
     );
   }
