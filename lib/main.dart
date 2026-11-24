@@ -27,7 +27,7 @@ class LabAApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Lab A - BottomNavigationBar',
+      title: 'Lab 05 - Exercise A',
       theme: ThemeData(primarySwatch: Colors.blue),
       home: const MainNavigationScreen(),
     );
